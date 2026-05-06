@@ -1,0 +1,42 @@
+{
+  "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/config.schema.json",
+  "grammars": [
+    {
+      "name": "livecalc",
+      "camelcase": "LiveCalc",
+      "title": "Livecalc",
+      "scope": "source.livecalc",
+      "file-types": [
+        "livecalc"
+      ],
+      "injection-regex": "^livecalc$",
+      "class-name": "TreeSitterLivecalc"
+    }
+  ],
+  "metadata": {
+    "version": "0.1.0",
+    "license": "MIT",
+    "description": "Used for live calculations in neovim.",
+    "authors": [
+      {
+        "name": "Franco Morroni",
+        "email": "fmorroni99@gmail.com",
+        "url": ""
+      }
+    ],
+    "links": {
+      "repository": "https://github.com/tree-sitter/tree-sitter-livecalc",
+      "funding": ""
+    }
+  },
+  "bindings": {
+    "c": true,
+    "go": false,
+    "java": false,
+    "node": true,
+    "python": false,
+    "rust": false,
+    "swift": false,
+    "zig": false
+  }
+}

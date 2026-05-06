@@ -1,0 +1,9 @@
+# Ignore everything recursively
+*
+
+# But not the .<ext> files
+!*.js
+!*.json
+
+# Check subdirectories too
+!*/
