@@ -9,7 +9,11 @@
 
 export default grammar({
   name: 'livecalc',
-  precedences: ($) => [['call', 'unary_void', 'binary_pow', 'unit', 'binary_times', 'binary_plus']],
+  precedences: ($) => [
+    ['call', 'unary_void', 'binary_pow', 'unit', 'binary_times', 'binary_plus', $.function],
+  ],
+
+  conflicts: ($) => [[$.expression, $.parameter]],
 
   extras: ($) => [
     /[ \t\r]/, // whitespace
@@ -21,24 +25,14 @@ export default grammar({
   rules: {
     source_file: ($) => repeat(seq(optional($._statement), $._newline)),
 
-    // function_definition: ($) =>
-    //   seq("func", $.identifier, $.parameter_list, $._type, $.block),
-    //
-    // parameter_list: ($) =>
-    //   seq(
-    //     "(",
-    //     // TODO: parameters
-    //     ")",
-    //   ),
-    //
-    // _type: ($) =>
-    //   choice(
-    //     "bool",
-    //     // TODO: other kinds of types
-    //   ),
-    //
-    // block: ($) => seq("{", repeat($._statement), "}"),
-    // return_statement: ($) => seq("return", $.expression, ";"),
+    identifier: () => /[a-zA-Z_]\w*/,
+
+    number: ($) => choice($._integer, $._float),
+    _integer: () => /\d+/,
+    _float: () => /\d*\.\d+/,
+
+    _newline: () => /\n/,
+    comment: () => token(seq('//', /.*/)),
 
     _statement: ($) =>
       choice(
@@ -59,7 +53,10 @@ export default grammar({
         $.expression_with_units,
         $.identifier,
         $.number,
-        $.parenthesized_expression
+        $.parenthesized_expression,
+        $.builtin,
+        $.function_call,
+        $.function
       ),
 
     expression_with_units: ($) =>
@@ -131,13 +128,38 @@ export default grammar({
 
     units: ($) => seq('[', $.unit_expression, ']'),
 
-    identifier: () => /[a-z]+/,
+    builtin: ($) => seq('@', $.identifier),
 
-    number: ($) => choice($._integer, $._float),
-    _integer: () => /\d+/,
-    _float: () => /\d*\.\d+/,
+    function_call: ($) =>
+      prec(
+        'call',
+        seq(
+          // field('callee', choice($.identifier, $.builtin, $.parenthesized_expression)),
+          field('callee', choice($.expression)),
+          '(',
+          field('args', optional($.argument_list)),
+          ')'
+        )
+      ),
 
-    _newline: () => /\n/,
-    comment: () => token(seq('//', /.*/)),
+    argument_list: ($) => separatedList($.expression, ','),
+
+    function: ($) =>
+      seq('(', field('params', optional($.parameter_list)), ')', '=>', field('body', $.expression)),
+
+    parameter_list: ($) => separatedList($.parameter, ','),
+
+    parameter: ($) => seq(field('name', $.identifier), optional(seq(':', field('type', $.units)))),
+
+    block: ($) => seq('{', repeat($._statement), '}'),
+    return_statement: ($) => seq('return', $.expression, ';'),
   },
 });
+
+/**
+ * @param {Rule} rule
+ * @param {string} separator
+ */
+function separatedList(rule, separator) {
+  return seq(rule, repeat(seq(separator, rule)));
+}
