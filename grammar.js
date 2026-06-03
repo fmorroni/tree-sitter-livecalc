@@ -10,7 +10,18 @@
 export default grammar({
   name: 'livecalc',
   precedences: ($) => [
-    ['call', 'unary_void', 'binary_pow', 'unit', 'binary_times', 'binary_plus', $.function],
+    [
+      'call',
+      'unary_void',
+      'binary_pow',
+      'unit',
+      'binary_times',
+      'binary_plus',
+      'comparison',
+      'boolean_and',
+      'boolean_or',
+      $.function,
+    ],
   ],
 
   conflicts: ($) => [[$.expression, $.parameter]],
@@ -22,6 +33,8 @@ export default grammar({
 
   supertypes: ($) => [$.expression, $.unit_expression],
 
+  word: ($) => $.identifier,
+
   rules: {
     source_file: ($) => repeat(seq(optional($._statement), $._newline)),
 
@@ -30,17 +43,12 @@ export default grammar({
     number: ($) => choice($._integer, $._float),
     _integer: () => /\d+/,
     _float: () => /\d*\.\d+/,
+    boolean: () => choice('true', 'false'),
 
     _newline: () => /\n/,
     comment: () => token(seq('//', /.*/)),
 
-    _statement: ($) =>
-      choice(
-        // $.return_statement,
-        $.assignment,
-        $.expression
-        // TODO: other kinds of statements
-      ),
+    _statement: ($) => choice($.assignment, $.expression),
 
     assignment: ($) => seq(field('left', $.identifier), '=', field('right', $.expression)),
 
@@ -48,15 +56,17 @@ export default grammar({
 
     expression: ($) =>
       choice(
-        $.binary_expression,
-        $.unary_expression,
-        $.expression_with_units,
         $.identifier,
         $.number,
-        $.parenthesized_expression,
+        $.boolean,
         $.builtin,
+        $.function,
         $.function_call,
-        $.function
+        $.binary_numeric_expression,
+        $.binary_boolean_expression,
+        $.unary_expression,
+        $.expression_with_units,
+        $.parenthesized_expression
       ),
 
     expression_with_units: ($) =>
@@ -65,10 +75,10 @@ export default grammar({
     unary_expression: ($) =>
       prec.left(
         'unary_void',
-        seq(field('operator', choice('-', '+')), field('expr', $.expression))
+        seq(field('operator', choice('-', '+', '!')), field('expr', $.expression))
       ),
 
-    binary_expression: ($) =>
+    binary_numeric_expression: ($) =>
       choice(
         ...[
           ['+', 'binary_plus'],
@@ -77,6 +87,29 @@ export default grammar({
           ['/', 'binary_times'],
           ['%', 'binary_times'],
           ['**', 'binary_pow', 'right'],
+        ].map(([operator, precedence, associativity]) =>
+          (associativity === 'right' ? prec.right : prec.left)(
+            precedence,
+            seq(
+              field('left', $.expression),
+              field('operator', operator),
+              field('right', $.expression)
+            )
+          )
+        )
+      ),
+
+    binary_boolean_expression: ($) =>
+      choice(
+        ...[
+          ['||', 'boolean_or'],
+          ['&&', 'boolean_and'],
+          ['==', 'comparison'],
+          ['!=', 'comparison'],
+          ['<', 'comparison'],
+          ['<=', 'comparison'],
+          ['>', 'comparison'],
+          ['>=', 'comparison'],
         ].map(([operator, precedence, associativity]) =>
           (associativity === 'right' ? prec.right : prec.left)(
             precedence,
@@ -134,7 +167,6 @@ export default grammar({
       prec(
         'call',
         seq(
-          // field('callee', choice($.identifier, $.builtin, $.parenthesized_expression)),
           field('callee', choice($.expression)),
           '(',
           field('args', optional($.argument_list)),

@@ -18,6 +18,8 @@
   "@" @function.builtin
   (identifier) @function.builtin)
 
+(boolean) @boolean
+
 (function_call
   (identifier) @function.call)
 
