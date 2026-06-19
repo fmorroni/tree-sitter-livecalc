@@ -337,7 +337,33 @@
   {
     "type": "number",
     "named": true,
-    "fields": {}
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "numeric_binary",
+          "named": true
+        },
+        {
+          "type": "numeric_exponential",
+          "named": true
+        },
+        {
+          "type": "numeric_float",
+          "named": true
+        },
+        {
+          "type": "numeric_hexadecimal",
+          "named": true
+        },
+        {
+          "type": "numeric_integer",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "parameter",
@@ -702,6 +728,26 @@
   },
   {
     "type": "identifier",
+    "named": true
+  },
+  {
+    "type": "numeric_binary",
+    "named": true
+  },
+  {
+    "type": "numeric_exponential",
+    "named": true
+  },
+  {
+    "type": "numeric_float",
+    "named": true
+  },
+  {
+    "type": "numeric_hexadecimal",
+    "named": true
+  },
+  {
+    "type": "numeric_integer",
     "named": true
   },
   {

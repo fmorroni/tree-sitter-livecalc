@@ -7,6 +7,16 @@
 /// <reference types="tree-sitter-cli/dsl" />
 // @ts-check
 
+// TODO:
+// - allow boolean as function paramenter
+// - allow typed functions as function paramenter
+// - allow "unit included" for unit typed parameters. Will have to define notation,
+//   maybe using curly braces like `param: {s/m**2}` to symbolize `param` must include
+//   `s` with exponent 1 and `m` with exponent `-2` but could include any other units.
+//   Would be useful for things like `s_to_ns = (s: {s}) => s * 1000000000 [ns/s]` which
+//   could allow `s_to_ns(1 [s/tick])` but not `s_to_ns(1 [m])`.
+// - bit-wise operators
+
 export default grammar({
   name: 'livecalc',
   precedences: ($) => [
@@ -40,9 +50,19 @@ export default grammar({
 
     identifier: () => /[a-zA-Z_]\w*/,
 
-    number: ($) => choice($._integer, $._float),
-    _integer: () => /\d+/,
-    _float: () => /\d*\.\d+/,
+    number: ($) =>
+      choice(
+        $.numeric_integer,
+        $.numeric_float,
+        $.numeric_exponential,
+        $.numeric_hexadecimal,
+        $.numeric_binary
+      ),
+    numeric_integer: () => /\d+/,
+    numeric_float: () => /\d*\.\d+/,
+    numeric_exponential: () => /\d*\.?\d+e[+-]?\d+/,
+    numeric_hexadecimal: () => /0[xX][0-9a-fA-F]+/,
+    numeric_binary: () => /0[bB][0-1]+/,
     boolean: () => choice('true', 'false'),
 
     _newline: () => /\n/,

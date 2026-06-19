@@ -36,21 +36,45 @@
       "members": [
         {
           "type": "SYMBOL",
-          "name": "_integer"
+          "name": "numeric_integer"
         },
         {
           "type": "SYMBOL",
-          "name": "_float"
+          "name": "numeric_float"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "numeric_exponential"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "numeric_hexadecimal"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "numeric_binary"
         }
       ]
     },
-    "_integer": {
+    "numeric_integer": {
       "type": "PATTERN",
       "value": "\\d+"
     },
-    "_float": {
+    "numeric_float": {
       "type": "PATTERN",
       "value": "\\d*\\.\\d+"
+    },
+    "numeric_exponential": {
+      "type": "PATTERN",
+      "value": "\\d*\\.?\\d+e[+-]?\\d+"
+    },
+    "numeric_hexadecimal": {
+      "type": "PATTERN",
+      "value": "0x[0-9a-fA-F]+"
+    },
+    "numeric_binary": {
+      "type": "PATTERN",
+      "value": "0b[0-1]+"
     },
     "boolean": {
       "type": "CHOICE",
