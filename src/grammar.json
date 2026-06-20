@@ -28,8 +28,23 @@
       }
     },
     "identifier": {
-      "type": "PATTERN",
-      "value": "[a-zA-Z_]\\w*"
+      "type": "TOKEN",
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "PATTERN",
+            "value": "[^\\x00-\\x1F\\s\\p{Zs}0-9:;`\"'@#.,|^&<=>+\\-*/\\\\%?!~()\\[\\]{}\\uFEFF\\u2060\\u200B\\u2028\\u2029]|\\\\u[0-9a-fA-F]{4}|\\\\u\\{[0-9a-fA-F]+\\}"
+          },
+          {
+            "type": "REPEAT",
+            "content": {
+              "type": "PATTERN",
+              "value": "[^\\x00-\\x1F\\s\\p{Zs}:;`\"'@#.,|^&<=>+\\-*/\\\\%?!~()\\[\\]{}\\uFEFF\\u2060\\u200B\\u2028\\u2029]|\\\\u[0-9a-fA-F]{4}|\\\\u\\{[0-9a-fA-F]+\\}"
+            }
+          }
+        ]
+      }
     },
     "number": {
       "type": "CHOICE",
@@ -70,11 +85,11 @@
     },
     "numeric_hexadecimal": {
       "type": "PATTERN",
-      "value": "0x[0-9a-fA-F]+"
+      "value": "0[xX][0-9a-fA-F]+"
     },
     "numeric_binary": {
       "type": "PATTERN",
-      "value": "0b[0-1]+"
+      "value": "0[bB][0-1]+"
     },
     "boolean": {
       "type": "CHOICE",
@@ -1096,6 +1111,15 @@
         }
       ]
     },
+    "parameter_type": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "units"
+        }
+      ]
+    },
     "parameter": {
       "type": "SEQ",
       "members": [
@@ -1122,7 +1146,7 @@
                   "name": "type",
                   "content": {
                     "type": "SYMBOL",
-                    "name": "units"
+                    "name": "parameter_type"
                   }
                 }
               ]

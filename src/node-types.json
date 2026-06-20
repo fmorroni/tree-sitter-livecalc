@@ -384,7 +384,7 @@
         "required": false,
         "types": [
           {
-            "type": "units",
+            "type": "parameter_type",
             "named": true
           }
         ]
@@ -401,6 +401,21 @@
       "types": [
         {
           "type": "parameter",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "parameter_type",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "units",
           "named": true
         }
       ]

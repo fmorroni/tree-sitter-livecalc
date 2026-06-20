@@ -8,14 +8,15 @@
 // @ts-check
 
 // TODO:
-// - allow boolean as function paramenter
-// - allow typed functions as function paramenter
+// - allow boolean as function paramenter.
+// - allow typed functions as function paramenter.
 // - allow "unit included" for unit typed parameters. Will have to define notation,
 //   maybe using curly braces like `param: {s/m**2}` to symbolize `param` must include
 //   `s` with exponent 1 and `m` with exponent `-2` but could include any other units.
 //   Would be useful for things like `s_to_ns = (s: {s}) => s * 1000000000 [ns/s]` which
 //   could allow `s_to_ns(1 [s/tick])` but not `s_to_ns(1 [m])`.
-// - bit-wise operators
+// - bit-wise operators.
+// - allow `or` in parameter types like `(p: [s]|[m]) => ...`.
 
 export default grammar({
   name: 'livecalc',
@@ -48,7 +49,17 @@ export default grammar({
   rules: {
     source_file: ($) => repeat(seq(optional($._statement), $._newline)),
 
-    identifier: () => /[a-zA-Z_]\w*/,
+    // From `https://github.com/tree-sitter/tree-sitter-javascript/blob/58404d8cf191d69f2674a8fd507bd5776f46cb11/grammar.js#L1143`
+    identifier: () => {
+      const alpha =
+        //@ts-ignore
+        /[^\x00-\x1F\s\p{Zs}0-9:;`"'@#.,|^&<=>+\-*/\\%?!~()\[\]{}\uFEFF\u2060\u200B\u2028\u2029]|\\u[0-9a-fA-F]{4}|\\u\{[0-9a-fA-F]+\}/;
+
+      const alphanumeric =
+        //@ts-ignore
+        /[^\x00-\x1F\s\p{Zs}:;`"'@#.,|^&<=>+\-*/\\%?!~()\[\]{}\uFEFF\u2060\u200B\u2028\u2029]|\\u[0-9a-fA-F]{4}|\\u\{[0-9a-fA-F]+\}/;
+      return token(seq(alpha, repeat(alphanumeric)));
+    },
 
     number: ($) =>
       choice(
