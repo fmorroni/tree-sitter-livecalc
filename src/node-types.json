@@ -335,6 +335,48 @@
     }
   },
   {
+    "type": "function_type",
+    "named": true,
+    "fields": {
+      "param_types": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "type_list",
+            "named": true
+          }
+        ]
+      },
+      "return_type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "any_type",
+            "named": true
+          },
+          {
+            "type": "boolean_type",
+            "named": true
+          },
+          {
+            "type": "function_type",
+            "named": true
+          },
+          {
+            "type": "numeric_type",
+            "named": true
+          },
+          {
+            "type": "units",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "number",
     "named": true,
     "fields": {},
@@ -384,7 +426,23 @@
         "required": false,
         "types": [
           {
-            "type": "parameter_type",
+            "type": "any_type",
+            "named": true
+          },
+          {
+            "type": "boolean_type",
+            "named": true
+          },
+          {
+            "type": "function_type",
+            "named": true
+          },
+          {
+            "type": "numeric_type",
+            "named": true
+          },
+          {
+            "type": "units",
             "named": true
           }
         ]
@@ -401,21 +459,6 @@
       "types": [
         {
           "type": "parameter",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "parameter_type",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "units",
           "named": true
         }
       ]
@@ -451,6 +494,37 @@
         },
         {
           "type": "expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "type_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "any_type",
+          "named": true
+        },
+        {
+          "type": "boolean_type",
+          "named": true
+        },
+        {
+          "type": "function_type",
+          "named": true
+        },
+        {
+          "type": "numeric_type",
+          "named": true
+        },
+        {
+          "type": "units",
           "named": true
         }
       ]
@@ -733,6 +807,14 @@
     "named": false
   },
   {
+    "type": "any_type",
+    "named": true
+  },
+  {
+    "type": "boolean_type",
+    "named": true
+  },
+  {
     "type": "comment",
     "named": true,
     "extra": true
@@ -763,6 +845,10 @@
   },
   {
     "type": "numeric_integer",
+    "named": true
+  },
+  {
+    "type": "numeric_type",
     "named": true
   },
   {

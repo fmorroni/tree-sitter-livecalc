@@ -1111,12 +1111,106 @@
         }
       ]
     },
-    "parameter_type": {
+    "boolean_type": {
+      "type": "STRING",
+      "value": "boolean"
+    },
+    "numeric_type": {
+      "type": "STRING",
+      "value": "numeric"
+    },
+    "type_list": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "_parameter_type"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "STRING",
+                "value": ","
+              },
+              {
+                "type": "SYMBOL",
+                "name": "_parameter_type"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "function_type": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "("
+        },
+        {
+          "type": "FIELD",
+          "name": "param_types",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "type_list"
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          }
+        },
+        {
+          "type": "STRING",
+          "value": ")"
+        },
+        {
+          "type": "STRING",
+          "value": "=>"
+        },
+        {
+          "type": "FIELD",
+          "name": "return_type",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_parameter_type"
+          }
+        }
+      ]
+    },
+    "any_type": {
+      "type": "STRING",
+      "value": "any"
+    },
+    "_parameter_type": {
       "type": "CHOICE",
       "members": [
         {
           "type": "SYMBOL",
           "name": "units"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "boolean_type"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "numeric_type"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "function_type"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "any_type"
         }
       ]
     },
@@ -1146,7 +1240,7 @@
                   "name": "type",
                   "content": {
                     "type": "SYMBOL",
-                    "name": "parameter_type"
+                    "name": "_parameter_type"
                   }
                 }
               ]

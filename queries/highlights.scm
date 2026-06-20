@@ -12,7 +12,13 @@
 ; Variables
 (identifier) @variable
 
-(unit_expression/identifier) @type
+([
+   (unit_expression/identifier)
+   (boolean_type)
+   (numeric_type)
+   (any_type)
+   (function_type)
+]) @type
 
 (builtin
   "@" @function.builtin

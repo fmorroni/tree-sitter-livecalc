@@ -8,8 +8,6 @@
 // @ts-check
 
 // TODO:
-// - allow boolean as function paramenter.
-// - allow typed functions as function paramenter.
 // - allow "unit included" for unit typed parameters. Will have to define notation,
 //   maybe using curly braces like `param: {s/m**2}` to symbolize `param` must include
 //   `s` with exponent 1 and `m` with exponent `-2` but could include any other units.
@@ -17,6 +15,7 @@
 //   could allow `s_to_ns(1 [s/tick])` but not `s_to_ns(1 [m])`.
 // - bit-wise operators.
 // - allow `or` in parameter types like `(p: [s]|[m]) => ...`.
+// - allow generics for units maybe something like `(a: <T>, b: <T>, c: <E>) => (a+b)*c` --> `([T], [T], [E]) => [E T]`
 
 export default grammar({
   name: 'livecalc',
@@ -212,7 +211,27 @@ export default grammar({
 
     parameter_list: ($) => separatedList($.parameter, ','),
 
-    parameter: ($) => seq(field('name', $.identifier), optional(seq(':', field('type', $.units)))),
+    boolean_type: () => 'boolean',
+
+    numeric_type: () => 'numeric',
+
+    type_list: ($) => separatedList($._parameter_type, ','),
+    function_type: ($) =>
+      seq(
+        '(',
+        field('param_types', optional($.type_list)),
+        ')',
+        '=>',
+        field('return_type', $._parameter_type)
+      ),
+
+    any_type: () => 'any',
+
+    _parameter_type: ($) =>
+      choice($.units, $.boolean_type, $.numeric_type, $.function_type, $.any_type),
+
+    parameter: ($) =>
+      seq(field('name', $.identifier), optional(seq(':', field('type', $._parameter_type)))),
 
     block: ($) => seq('{', repeat($._statement), '}'),
     return_statement: ($) => seq('return', $.expression, ';'),
