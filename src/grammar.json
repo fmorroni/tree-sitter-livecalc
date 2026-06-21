@@ -952,8 +952,16 @@
           "value": "["
         },
         {
-          "type": "SYMBOL",
-          "name": "unit_expression"
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "unit_expression"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
         },
         {
           "type": "STRING",

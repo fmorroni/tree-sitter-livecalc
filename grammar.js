@@ -189,7 +189,7 @@ export default grammar({
         $.unit_parenthesized_expression
       ),
 
-    units: ($) => seq('[', $.unit_expression, ']'),
+    units: ($) => seq('[', optional($.unit_expression), ']'),
 
     builtin: ($) => seq('@', $.identifier),
 
