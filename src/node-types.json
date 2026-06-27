@@ -489,6 +489,21 @@
       "required": false,
       "types": [
         {
+          "type": "statement",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "statement",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
           "type": "assignment",
           "named": true
         },
@@ -577,6 +592,16 @@
             "named": true
           }
         ]
+      },
+      "operator": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "/",
+            "named": false
+          }
+        ]
       }
     }
   },
@@ -620,6 +645,16 @@
           {
             "type": "unit_unary_expression",
             "named": true
+          }
+        ]
+      },
+      "operator": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "**",
+            "named": false
           }
         ]
       }

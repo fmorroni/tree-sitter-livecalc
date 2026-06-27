@@ -13,7 +13,7 @@
             "members": [
               {
                 "type": "SYMBOL",
-                "name": "_statement"
+                "name": "statement"
               },
               {
                 "type": "BLANK"
@@ -124,7 +124,7 @@
         ]
       }
     },
-    "_statement": {
+    "statement": {
       "type": "CHOICE",
       "members": [
         {
@@ -816,8 +816,12 @@
             "value": "1"
           },
           {
-            "type": "STRING",
-            "value": "/"
+            "type": "FIELD",
+            "name": "operator",
+            "content": {
+              "type": "STRING",
+              "value": "/"
+            }
           },
           {
             "type": "FIELD",
@@ -879,8 +883,12 @@
             }
           },
           {
-            "type": "STRING",
-            "value": "**"
+            "type": "FIELD",
+            "name": "operator",
+            "content": {
+              "type": "STRING",
+              "value": "**"
+            }
           },
           {
             "type": "FIELD",

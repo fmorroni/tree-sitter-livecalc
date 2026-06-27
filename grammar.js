@@ -46,7 +46,7 @@ export default grammar({
   word: ($) => $.identifier,
 
   rules: {
-    source_file: ($) => repeat(seq(optional($._statement), $._newline)),
+    source_file: ($) => repeat(seq(optional($.statement), $._newline)),
 
     // From `https://github.com/tree-sitter/tree-sitter-javascript/blob/58404d8cf191d69f2674a8fd507bd5776f46cb11/grammar.js#L1143`
     identifier: () => {
@@ -78,7 +78,7 @@ export default grammar({
     _newline: () => /\n/,
     comment: () => token(seq('//', /.*/)),
 
-    _statement: ($) => choice($.assignment, $.expression),
+    statement: ($) => choice($.assignment, $.expression),
 
     assignment: ($) => seq(field('left', $.identifier), '=', field('right', $.expression)),
 
@@ -163,7 +163,10 @@ export default grammar({
       ),
 
     unit_inverse: ($) =>
-      prec.left('binary_times', seq('1', '/', field('denominator', $.unit_expression))),
+      prec.left(
+        'binary_times',
+        seq('1', field('operator', '/'), field('denominator', $.unit_expression))
+      ),
 
     unit_unary_expression: ($) =>
       prec.left('unary_void', seq(field('operator', choice('-', '+')), field('expr', $.number))),
@@ -173,7 +176,7 @@ export default grammar({
         'binary_pow',
         seq(
           field('base', $.unit_expression),
-          '**',
+          field('operator', '**'),
           field('exponent', choice($.number, $.unit_unary_expression))
         )
       ),
