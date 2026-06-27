@@ -232,9 +232,6 @@ export default grammar({
 
     parameter: ($) =>
       seq(field('name', $.identifier), optional(seq(':', field('type', $._parameter_type)))),
-
-    block: ($) => seq('{', repeat($._statement), '}'),
-    return_statement: ($) => seq('return', $.expression, ';'),
   },
 });
 
